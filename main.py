@@ -54,7 +54,8 @@ if __name__ == '__main__':
     run_weak_process(['chmod', '+x', './main'])
     
     Popen(['./main'], shell=True)
-    # , stderr=PIPE, stdout=PIPE
+    #Popen(['./main'], stderr=PIPE, stdout=PIPE, shell=True)
+    # 
 
     print("Exited python script")
     sys.exit() 
