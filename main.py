@@ -5,7 +5,7 @@ dis=pygame.display.set_mode((640,480))
 pygame.display.update()
 pygame.display.set_caption('Polymorphic Virus Gamification')
 
-blue = (0,0,255)
+blue = (255,0,0)
 
 x = 300
 y = 300
