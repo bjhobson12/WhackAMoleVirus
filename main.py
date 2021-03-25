@@ -1,5 +1,6 @@
 # Hacking related Modules
 import os, sys
+from game import WhackAMole
 from subprocess import Popen, PIPE
 
 class PolymorphicAttack():
@@ -7,8 +8,6 @@ class PolymorphicAttack():
     def __init__(self):
         self.gcc_path = None
         
-
-
 
 def run_weak_process(cmd, blocking=False):
     # This is a non-blocking call
@@ -53,48 +52,11 @@ if __name__ == '__main__':
     run_weak_process([PolyAttack.gcc_path, os.path.join(os.getcwd(), "main.c"), "-o", "main"])
     run_weak_process(['chmod', '+x', './main'])
     
-    Popen(['./main'], shell=True)
-    #Popen(['./main'], stderr=PIPE, stdout=PIPE, shell=True)
+    #Popen(['./main'], shell=True)
+    Popen(['./main'], stderr=PIPE, stdout=PIPE, shell=True)
     # 
 
-    print("Exited python script")
-    sys.exit() 
-    import pygame
-    pygame.init()
-    dis=pygame.display.set_mode((640,480))
+    ppp = WhackAMole()
+    ppp.draw()
 
-    pygame.display.update()
-    pygame.display.set_caption('Polymorphic Virus Gamification')
-
-    blue = (0,0,255)
-
-    x = 300
-    y = 300
-
-    xchange = 0
-    ychange = 0
-
-    game_over=False
-    while not game_over:
-        for event in pygame.event.get():
-            if event.type==pygame.QUIT:
-                game_over=True
-            if event.type==pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    xchange = -20
-                    ychange = 0
-                elif event.key == pygame.K_RIGHT:
-                    xchange = 20
-                    ychange = 0
-                elif event.key == pygame.K_UP:
-                    xchange = 0
-                    ychange = -20
-                elif event.key == pygame.K_DOWN:
-                    xchange = 0
-                    ychange = 20
-        x += xchange
-        y += ychange
-        pygame.draw.rect(dis,blue,[310,230,10,10])
-        pygame.display.update()
-    pygame.quit()
-    quit()
+    
