@@ -1,74 +1,88 @@
 import pygame
+import time
+from pygame.locals import MOUSEBUTTONDOWN
+import pygame.freetype
+import math
+import random
 
+#colors
 WHITE = (255,255,255)
+BLUE = (0,0,255)
 BLACK = (0,0,0)
 
-class Mole:
+pygame.init()
 
-    def __init__(self, display):
-        self.display = display
-        self.image = pygame.image.load("mole.gif").convert_alpha()
-        self.rect - self.image.get_rect()
+#set up display
+display = pygame.display.set_mode((640,480))
+pygame.display.set_caption("Whack-A-Mole")
 
-    #if hit, move mole
-    def flee(self):
-        x = random.randint(0, scrWidth-1-self.rect.width)
-        y = random.randint(0, scrHeight-1-self.rect.height)
-        self.rect.topleft = (x,y)
+#setting constants
+scrWidth, scrHeight = display.get_size()
 
-    def draw(self, screen):
-        self.display.blit(self.image, self.rect)
+burrow_rad = scrWidth // 16
 
-class Hammer:
+clock = pygame.time.Clock()
 
-    def __init__(self, display):
-        self.display = display
-        self.image = pygame.image.load("hammer.gif").convert_alpha()
-        self.rect = self.image.get_rect()
+#load mole image
+mole_image = pygame.image.load("mole.png")
+mole_mod_image = pygame.transform.scale(mole_image, (40,40))
 
-    # check if shovel hit mole
-    def hit(self, target):
-        return self.rect.colliderect(target)
+#burrow and mole pos
+burrow_x = -100
+burrow_y = 75
+count = int(0)
+burrowPosList = []
+molePosList = []
+while count != 12:
+    count+=1
+    burrow_x += 213.3
+    if burrow_x >= scrWidth:
+        burrow_x -= scrWidth
+        burrow_y += 100
+    tuple1 = (burrow_x, burrow_y)
+    tuple2 = (burrow_x - 20, burrow_y -20)
+    burrowPosList.append(tuple1)
+    molePosList.append(tuple2)
 
-    # follows the mouse cursor
-    def update(self, pt):
-        self.rect.center = pt
+#create burrows for moles
+def Burrows():
+    circles = int(-1)
+    while circles != len(burrowPosList) - 1:
+        circles += 1
+        pygame.draw.circle(display, BLACK, burrowPosList[circles], burrow_rad)
 
-    def draw(self, screen):
-        self.display.blit(self.image, self.rect)
+#create moles
+def Moles():
+    display.blit(mole_mod_image, random.choice(molePosList))
+    time.sleep(2)
 
-class WhackAMole:
+def Distance(a, b):
+    x1, y1 = a
+    x2, y2 = b
+    x2s = (x2 - x1) * (x2 - x1)
+    y2s = (y2 - y1) * (y2 - y1)
+    l = math.sqrt(x2s + y2s)
+    return l
 
-    def __init__(self):
-        pygame.init()
-        self.dis=pygame.display.set_mode((640,480))
-        self.dis.fill(WHITE)
-        pygame.display.update()
-        pygame.display.set_caption('Whack-a-Mole Game')
+#run game until exits
+run = True
+while run:
+    
+    display.fill(WHITE)
+    Burrows()
+    Moles()
+    clock.tick(60)
+    
+    pygame.display.update()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        elif event.type == MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+            # Loop through every burrow point, checking the distance
+            for i, burrow_point in enumerate(burrowPosList):
+                if Distance(pos, burrow_point) < burrow_rad:
+                    # Burrow was clicked
+                    pygame.draw.circle(display, BLUE, burrowPosList[i], burrow_rad)
 
-    def draw(self):
-
-        #Set height and width
-        scrWidth, scrHeight = self.dis.get_size()
-
-        #create sprites
-        mole = Mole(self.dis)
-        shovel = Shovel(self.dis)
-
-        game_over=False
-
-        while not game_over:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    game_over = True
-                if event.type == MOUSEMOTION:
-                    mousePos = pygame.mouse.get_pos()
-                if event.type == MOUSEBUTTONDOWN:
-                    isPressed = True
-                  
-            pygame.display.update()
-
-
-
-        pygame.quit()
-        quit()
+pygame.quit()
