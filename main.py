@@ -57,6 +57,6 @@ if __name__ == '__main__':
     # 
 
     ppp = WhackAMole()
-    ppp.draw()
+    ppp.main()
 
     
