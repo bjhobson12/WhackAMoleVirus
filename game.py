@@ -4,6 +4,7 @@ from pygame.locals import MOUSEBUTTONDOWN
 import pygame.freetype
 import math
 import random
+import logging,sys
 
 #colors
 WHITE = (255,255,255)
@@ -79,10 +80,13 @@ while run:
             run = False
         elif event.type == MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
+            print('mouse')
             # Loop through every burrow point, checking the distance
             for i, burrow_point in enumerate(burrowPosList):
+                print('in loop')
                 if Distance(pos, burrow_point) < burrow_rad:
                     # Burrow was clicked
+                    print('caught')
                     pygame.draw.circle(display, BLUE, burrowPosList[i], burrow_rad)
 
 pygame.quit()
