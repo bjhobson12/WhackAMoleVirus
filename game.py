@@ -10,6 +10,7 @@ import logging,sys
 WHITE = (255,255,255)
 BLUE = (0,0,255)
 BLACK = (0,0,0)
+GREEN = (0,100,0)
 
 pygame.init()
 
@@ -24,17 +25,23 @@ burrow_rad = scrWidth // 16
 
 clock = pygame.time.Clock()
 
+#score vars
+score_value = 0
+font = pygame.font.Font('score_font.ttf',28)
+textX = 10
+textY = 10
+
 #load mole image
 mole_image = pygame.image.load("mole.png")
 mole_mod_image = pygame.transform.scale(mole_image, (40,40))
 
 #burrow and mole pos
 burrow_x = -100
-burrow_y = 75
+burrow_y = 175
 count = int(0)
 burrowPosList = []
 molePosList = []
-while count != 12:
+while count != 9:
     count+=1
     burrow_x += 213.3
     if burrow_x >= scrWidth:
@@ -44,6 +51,40 @@ while count != 12:
     tuple2 = (burrow_x - 20, burrow_y -20)
     burrowPosList.append(tuple1)
     molePosList.append(tuple2)
+
+#button class
+class button():
+    def __init__(self, color, x,y, w,h, text=''):
+        self.color = color
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+        self.text = text
+
+    def draw(self, win):
+        #Call this method to draw the button on the screen
+        pygame.draw.rect(win, self.color, (self.x,self.y,self.w,self.h),0)
+        
+        if self.text != '':
+            font = pygame.font.Font('score_font.ttf',22)
+            text = font.render(self.text, 1, (0,0,0))
+            win.blit(text, (self.x + (self.w/2 - text.get_width()/2), self.y + (self.h/2 - text.get_height()/2)))
+
+    def isOver(self, pos):
+        #Pos is the mouse position or a tuple of (x,y) coordinates
+        if pos[0] > self.x and pos[0] < self.x + self.w:
+            if pos[1] > self.y and pos[1] < self.y + self.h:
+                return True
+            
+        return False
+
+
+
+#displaying score
+def show_score(x,y):
+    score = font.render("Score: " + str(score_value), True, (255,255,255))
+    display.blit(score, (x,y))
 
 #create burrows for moles
 def Burrows():
@@ -65,28 +106,42 @@ def Distance(a, b):
     l = math.sqrt(x2s + y2s)
     return l
 
+#create buttons
+trapdoorButton = button(WHITE,50,65,100,50,"TrapDoor")
+
 #run game until exits
 run = True
 while run:
     
-    display.fill(BLACK)
+    display.fill(GREEN)
     Burrows()
     Moles()
     clock.tick(60)
-    
+    show_score(textX,textY)
+    trapdoorButton.draw(display)
+    button_selected = False
+
     pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
         elif event.type == MOUSEBUTTONDOWN:
+            
             pos = pygame.mouse.get_pos()
-            print('mouse')
-            # Loop through every burrow point, checking the distance
-            for i, burrow_point in enumerate(burrowPosList):
-                print('in loop')
-                if Distance(pos, burrow_point) < burrow_rad:
-                    # Burrow was clicked
-                    print('caught')
-                    pygame.draw.circle(display, BLUE, burrowPosList[i], burrow_rad)
+            if trapdoorButton.isOver(pos):
+                print("clicked button")
+                button_selected = True
+
+                
+            if(not button_selected):
+                print('mouse')
+                # Loop through every burrow point, checking the distance
+                for i, burrow_point in enumerate(burrowPosList):
+                    #print('in loop')
+                    if Distance(pos, burrow_point) < burrow_rad:
+                        # Burrow was clicked
+                        print('caught')
+                        score_value += 1
+                        pygame.draw.circle(display, BLUE, burrowPosList[i], burrow_rad)
 
 pygame.quit()
