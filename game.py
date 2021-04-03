@@ -50,7 +50,7 @@ def Burrows():
     circles = int(-1)
     while circles != len(burrowPosList) - 1:
         circles += 1
-        pygame.draw.circle(display, BLACK, burrowPosList[circles], burrow_rad)
+        pygame.draw.circle(display, WHITE, burrowPosList[circles], burrow_rad)
 
 #create moles
 def Moles():
@@ -69,7 +69,7 @@ def Distance(a, b):
 run = True
 while run:
     
-    display.fill(WHITE)
+    display.fill(BLACK)
     Burrows()
     Moles()
     clock.tick(60)
