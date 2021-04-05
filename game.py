@@ -10,6 +10,7 @@ import os
 from sys import exit
 from menu import Menu
 from sprites.playerSprite import PlayerSprite
+from gamestate import _GameState
 
 
 def distance(a, b):
@@ -20,14 +21,10 @@ def distance(a, b):
 
     return sqrt(x2s + y2s)
 
-class _GameState(Enum):
-        MENU, LEVEL_SELECT, PLAYING, WIN, LOSE, EXIT = range(6)
-
 class WhackAMole:
 
     # Colors
     WHITE = (255,255,255)
-    BLUE = (0,0,255)
     BLACK = (0,0,0)
     SKY_BLUE = (40,151,255)
 
@@ -48,36 +45,48 @@ class WhackAMole:
         self.scrWidth, self.scrHeight = self.display.get_size()
         self.clock = pygame.time.Clock()
 
-        self.background_color = self.SKY_BLUE
+        self.background_color = self.WHITE
+        self.menu = None
+
+        pygame.mouse.set_visible(False)
 
         self.set_state(_GameState.MENU)
 
     def set_state(self, state):
         # Do stuff
         if state == _GameState.MENU:
-            pygame.mixer.music.load(os.path.join(os.getcwd(), 'assets', 'audio', "mixkit-games-worldbeat-466.mp3"))
+            pygame.mixer.music.load(os.path.join( './assets', 'audio', "mixkit-games-worldbeat-466.mp3"))
             pygame.mixer.music.play(-1)
-            self.menu = Menu(self.display)
-        elif (state == _GameState.LEVEL_SELECT):
+            if self.menu is None:
+                self.menu = Menu(self.display)
+        elif state == _GameState.LEVEL_SELECT:
             pass
         elif state == _GameState.PLAYING:
             self.player = PlayerSprite(self.display)
             pass
         elif state == _GameState.EXIT:
             pass
-        else:
-            raise ValueError("You passed an invalid state variable to set_state")
+        elif state == _GameState.SETTINGS:
+            pass
 
         self.state = state
 
     def process_game_events(self):
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
-                self.set_state(_GameState.EXIT)
+                self.set_state(GameState.EXIT)
                 break
-            elif event.type == MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                # Loop through every burrow point, checking the distance
+
+            if self.state == _GameState.MENU:
+                self.menu.handle_event(self, event)
+            elif self.state == _GameState.LEVEL_SELECT:
+                pass
+            elif self.state == _GameState.PLAYING:
+                self.player.handle_event(event)
+                pass
+            elif self.state == _GameState.EXIT:
+                pass
                 
 
     def main(self):
@@ -89,7 +98,7 @@ class WhackAMole:
             self.process_game_events()
 
             if self.state == _GameState.MENU:
-                self.menu.update(dt)
+                self.menu.update(self, dt)
                 self.menu.draw()
             elif self.state == _GameState.LEVEL_SELECT:
                 pass
@@ -99,8 +108,12 @@ class WhackAMole:
                 pass
             elif self.state == _GameState.EXIT:
                 pass
+            elif self.state == _GameState.SETTINGS:
+                pass
             else:
                 raise ValueError("You passed an invalid state variable to set_state")
+
+            
 
             pygame.display.update()
             

@@ -22,6 +22,6 @@ class AbstractSprite(pygame.sprite.Sprite):
         self.animating = True
 
     def load_sprite(self, file_name):
-        return pygame.image.load(os.path.join(os.getcwd(), *AbstractSprite.RELATIVE_PATH_LIST, file_name)).convert_alpha()
+        return pygame.image.load(os.path.join('./', *AbstractSprite.RELATIVE_PATH_LIST, file_name)).convert_alpha()
     
 
