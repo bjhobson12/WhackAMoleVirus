@@ -85,7 +85,7 @@ points =0
 
 
 
-while count != 5:
+while count != 9:
     count+=1
     burrow_x += 213.3
     if burrow_x >= scrWidth:
@@ -182,12 +182,11 @@ def GetRidOfMolesForFiveSeconds():
     #re-creates the white burrows
     circles = int(-1)
     
-    
     while circles != len(burrowPosList) - 1:
         circles += 1
-        pygame.draw.circle(display, BROWN, burrowPosList[circles], burrow_rad)
+        pygame.draw.circle(display, WHITE, burrowPosList[circles], burrow_rad)
 
-    time.sleep(5)
+    #time.sleep(5)
     
 
 
@@ -208,15 +207,13 @@ def DoorCoveringHole(doorPosition):
 
 #creates a honeypot for the mole; if mole gets trapped, immediately get points for it
 def TrapMolesIntoAHole(mole_pos):
-    display.blit(honeypot_mod_image, (0,100))
+    #display.blit(honeypot_mod_image, (0,100))
     for burrow in trapDoorPositions:
         #print(burrow)
         score_value = 0
         if (abs(mole_pos[0] - burrow[0]) < 7.25):
             #display a message saying that the trap door caught the mole
             print("ew! the honeypot caught one of em moles!")
-            display.blit(honeypot_mod_image, (0,100))
-            #display.blit(honeypot_mod_image, 50,50)
             score_value += 1
         return score_value
 
@@ -268,7 +265,6 @@ while run:
     if (points is not None):
         if points > 0:
             score_value += points
-            display.blit(honeypot_mod_image, (0,100))
 
 
     display.fill(GREEN)
