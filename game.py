@@ -14,6 +14,7 @@ GREEN = (0,100,0)
 OFF_WHITE = (245,242,208)
 GREY = (266,220,205)
 BROWN = (195,155,119)
+TRANSPARENT = (0,0,0)
 
 pygame.init()
 
@@ -203,12 +204,14 @@ while run:
     passed_time = pygame.time.get_ticks()
     print(passed_time)
     show_time(passed_time,400,10)
- 
-    
 
     display.fill(GREEN)
     Burrows()
     mole_pos = Moles()
+    modified_mole_pos = list(mole_pos)
+    modified_mole_pos[0] = mole_pos[0] + 7
+    modified_mole_pos[1] = mole_pos[1] + 9
+    mole_pos = tuple(modified_mole_pos)
     clock.tick(60)
     show_score(textX,textY)
     #draw button
@@ -264,7 +267,7 @@ while run:
                         # Burrow was clicked
                         print('caught')
                         display.blit(whackedMole_mod_image, mole_pos)
-                        time.sleep(1)
+                        time.sleep(1.5)
                         score_value += 1
     
 
