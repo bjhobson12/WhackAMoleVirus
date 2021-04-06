@@ -63,6 +63,7 @@ class WhackAMole:
             if self.level_select is None:
                 self.level_select = LevelSelect(self.display)
         elif state == _GameState.PLAYING:
+            pygame.mixer.music.pause()
             self.level = self.level_select.current_level(self.display)
         elif state == _GameState.EXIT:
             pass

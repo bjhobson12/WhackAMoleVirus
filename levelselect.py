@@ -219,6 +219,7 @@ class LevelSelect:
                 self.play_counter = 0
 
             if self.play_counter >= 3:
+                self.play_counter = 0
                 game.set_state(_GameState.PLAYING)
 
     def select_level_index(self, i):

@@ -1,0 +1,28 @@
+import pygame
+import os
+
+
+class Mole:
+
+    RELATIVE_PATH_LIST = ["assets"]
+
+    def __init__(self, pos=(0,0)):
+        self.sprite = self.load_sprite('mole.png')
+        self.position = self.sprite.get_rect()
+        self.position.x = pos[0]
+        self.position.y = pos[1]
+        self.is_dead = False
+
+    def load_sprite(self, file_name, add_sub_dir=[], alpha=True):
+        ret = pygame.image.load(os.path.join('./', *Mole.RELATIVE_PATH_LIST, 'sprites', *add_sub_dir, file_name))
+        if alpha:
+            return ret.convert_alpha()
+        return ret
+
+    def contains(self, p):
+        x, y = p
+        return x > self.position.x and x < self.position.x + self.sprite.get_width() and y > self.position.y and y < self.position.y + self.sprite.get_height()
+
+    def die(self):
+        self.is_dead = True
+        self.sprite = self.load_sprite('whacked_mole.png')
