@@ -11,12 +11,13 @@ import math
 class Menu:
 
     RELATIVE_PATH_LIST = ['assets']
-    TRANSITION_DELAY = 2
+    TRANSITION_DELAY = 1
     #https://cga-creative-game-assets.itch.io/gold-2d-mobile-ui-for-casual-game
     #https://raventale.itch.io/parallax-background?download
 
     def __init__(self, display):
         self.display = display
+        self.state = None
         self.font = self.load_font("LuckiestGuy-Regular.ttf", 100)
         self.font_small = self.load_font("LuckiestGuy-Regular.ttf", 18)
 
@@ -37,6 +38,8 @@ class Menu:
         self.title_text_pos = self.title_text.get_rect()
         self.title_text_pos.x = int((self.display.get_width() - self.title_text.get_width()) / 2.0)
         self.title_text_pos.y = int(self.display.get_height()*0.15)
+
+        
 
         self.menu_level_button = pygame.transform.scale(self.load_img('b_3.png', add_sub_dir=['ui_gold']), (int(803/5), int(305/6))) 
 
@@ -130,12 +133,17 @@ class Menu:
 
 
     def set_state(self, state):
+        if state == self.state:
+            return
         # Do stuff
         if state == _MenuState.TRANSITION_IN:
+            pygame.mixer.music.load(os.path.join( './assets', 'audio', "mixkit-games-worldbeat-466.mp3"))
+            pygame.mixer.music.play(-1, fade_ms=Menu.TRANSITION_DELAY*1000)
             self.counter = 0
         elif state == _MenuState.STATIC:
             pass
         elif state == _MenuState.TRANSITION_OUT:
+            pygame.mixer.music.fadeout(Menu.TRANSITION_DELAY*1000)
             self.counter = 0
 
         self.state = state

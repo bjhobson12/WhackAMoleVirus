@@ -9,6 +9,7 @@ from enum import Enum
 import os
 from sys import exit
 from menu import Menu
+from levelselect import LevelSelect
 from sprites.playerSprite import PlayerSprite
 from gamestate import _GameState
 
@@ -35,7 +36,7 @@ class WhackAMole:
 
         pygame.init()
         pygame.mixer.init()
-        pygame.mixer.music.set_volume(0.7)
+        pygame.mixer.music.set_volume(0.5)
 
         # Set up display
         self.display = pygame.display.set_mode((1000, 600))
@@ -47,6 +48,7 @@ class WhackAMole:
 
         self.background_color = self.WHITE
         self.menu = None
+        self.level_select = None
 
         pygame.mouse.set_visible(False)
 
@@ -55,15 +57,13 @@ class WhackAMole:
     def set_state(self, state):
         # Do stuff
         if state == _GameState.MENU:
-            pygame.mixer.music.load(os.path.join( './assets', 'audio', "mixkit-games-worldbeat-466.mp3"))
-            pygame.mixer.music.play(-1)
             if self.menu is None:
                 self.menu = Menu(self.display)
         elif state == _GameState.LEVEL_SELECT:
-            pass
+            if self.level_select is None:
+                self.level_select = LevelSelect(self.display)
         elif state == _GameState.PLAYING:
-            self.player = PlayerSprite(self.display)
-            pass
+            self.level = self.level_select.current_level(self.display)
         elif state == _GameState.EXIT:
             pass
         elif state == _GameState.SETTINGS:
@@ -75,16 +75,15 @@ class WhackAMole:
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
-                self.set_state(GameState.EXIT)
+                self.set_state(_GameState.EXIT)
                 break
 
             if self.state == _GameState.MENU:
                 self.menu.handle_event(self, event)
             elif self.state == _GameState.LEVEL_SELECT:
-                pass
+                self.level_select.handle_event(self, event)
             elif self.state == _GameState.PLAYING:
-                self.player.handle_event(event)
-                pass
+                self.level.handle_event(self, event)
             elif self.state == _GameState.EXIT:
                 pass
                 
@@ -101,10 +100,11 @@ class WhackAMole:
                 self.menu.update(self, dt)
                 self.menu.draw()
             elif self.state == _GameState.LEVEL_SELECT:
-                pass
+                self.level_select.update(self, dt)
+                self.level_select.draw()
             elif self.state == _GameState.PLAYING:
-                self.player.update(dt)
-                self.player.draw(100, 100)
+                self.level.update(self, dt)
+                self.level.draw()
                 pass
             elif self.state == _GameState.EXIT:
                 pass
