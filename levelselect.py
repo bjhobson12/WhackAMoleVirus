@@ -31,7 +31,9 @@ class LevelSelect:
         self.font = self.load_font("LuckiestGuy-Regular.ttf", 100)
         self.font_small = self.load_font("LuckiestGuy-Regular.ttf", 18)
         self.select_sound = pygame.mixer.Sound(os.path.join('./', *LevelSelect.RELATIVE_PATH_LIST, 'audio', 'mixkit-winning-a-coin-video-game-2069.wav'))
+        self.select_sound.set_volume(0.05)
         self.locked_sound = pygame.mixer.Sound(os.path.join('./', *LevelSelect.RELATIVE_PATH_LIST, 'audio', 'mixkit-quick-lock-sound-2854.wav'))
+        self.locked_sound.set_volume(0.05)
 
 
         self.cursor_img = self.load_img("hammer.png")
@@ -315,13 +317,14 @@ class LevelSelect:
             else:
                 pygame.mixer.music.stop()
                 pygame.mixer.music.load(os.path.join( './assets', 'audio', "mixkit-games-worldbeat-466.mp3"))
+                pygame.mixer.music.set_volume(0.05)
                 pygame.mixer.music.play(-1, fade_ms=LevelSelect.TRANSITION_DELAY*1000)
         elif state == _LevelSelectState.ROCK_WORLD:
             self.backward_button.disabled = False
             self.forward_button.disabled = False
             self.cloud_speed = 8
             pygame.mixer.music.stop()
-            pygame.mixer.music.set_volume(0.4)
+            pygame.mixer.music.set_volume(0.03)
             pygame.mixer.music.load(os.path.join( './assets', 'audio', "mixkit-medieval-show-fanfare-announcement-226.wav"))
             pygame.mixer.music.play(-1, fade_ms=LevelSelect.TRANSITION_DELAY*1000)
         elif state == _LevelSelectState.ICE_WORLD:
@@ -329,8 +332,8 @@ class LevelSelect:
             self.backward_button.disabled = False
             self.cloud_speed = 0
             pygame.mixer.music.stop()
-            pygame.mixer.music.set_volume(2.0)
             pygame.mixer.music.load(os.path.join( './assets', 'audio', "mixkit-island-beat-250.mp3"))
+            pygame.mixer.music.set_volume(0.03)
             pygame.mixer.music.play(-1, start=10.0, fade_ms=LevelSelect.TRANSITION_DELAY*1000)
 
         elif state == _LevelSelectState.TRANSITION_LEFT or state == _LevelSelectState.TRANSITION_RIGHT:

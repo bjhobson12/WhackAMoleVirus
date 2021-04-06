@@ -8,6 +8,8 @@ from menustate import _MenuState
 from utility import easeInBounce, easeOutBound
 import math
 from components.mole import Mole
+from components.burrow import Burrow
+from components.trapdoor import TrapDoor
 from random import randrange as rand
 
 class LevelOne(AbstractLevel):
@@ -36,14 +38,35 @@ class LevelOne(AbstractLevel):
         self.kill_count_text_pos.y = 25
         self.kill_count_text_pos.x = 25
 
+        self.explode_button = Button(self.display, pygame.transform.scale(self.load_img('b_3.png', add_sub_dir=['ui_gold']), (int(803/5), int(305/6))), (85, self.display.get_height()/2), text="Explode Moles", font=self.font_small)
+        self.slow_down_button = Button(self.display, pygame.transform.scale(self.load_img('b_3.png', add_sub_dir=['ui_gold']), (int(803/5), int(305/6))), (85, self.display.get_height()/2 + 50), text="Slow Down", font=self.font_small)
+        self.trap_door_button = Button(self.display, pygame.transform.scale(self.load_img('b_3.png', add_sub_dir=['ui_gold']), (int(803/5), int(305/6))), (85, self.display.get_height()/2+100), text="Trap Door", font=self.font_small)
+        self.burrow_cover_button = Button(self.display, pygame.transform.scale(self.load_img('b_3.png', add_sub_dir=['ui_gold']), (int(803/5), int(305/6))), (85, self.display.get_height()/2 + 150), text="Burrow Cover", font=self.font_small)
         
+        self.mole_entities.append(Mole(self.mole_entities, pos=self.mole_hole_locs[rand(9)]))
+        self.mole_entities.append(Mole(self.mole_entities, pos=self.mole_hole_locs[rand(9)]))
 
-        self.mole_entities = [Mole(pos=(rand(self.display.get_width()/2),500)), Mole(pos=(rand(self.display.get_width()/2),500))]
+        #self.burrow_cover_list.append(Burrow(self.burrow_cover_list, 0, lifespan=4))
+
+        #self.trap_door_list.append(TrapDoor(self.trap_door_list, 1, lifespan=10))
 
     def update(self, game, dt):
         cur_pos = pygame.mouse.get_pos()
         self.cursor_img_rect = (cur_pos[0] - 13, cur_pos[1] - 51)
 
+        self.explode_button.update(game, dt)
+        self.slow_down_button.update(game, dt)
+        self.trap_door_button.update(game, dt)
+        self.burrow_cover_button.update(game, dt)
+
+        for mole in self.mole_entities:
+            mole.update(game, dt)
+
+        for burrow_cover in self.burrow_cover_list:
+            burrow_cover.update(game, dt)
+
+        for trap_door in self.trap_door_list:
+            trap_door.update(game, dt)
         
         self.timer_text = self.font.render(str(math.ceil(self.timer)), True, (255, 255, 255))
         self.timer_text_pos.x = (self.display.get_width() - self.timer_text.get_width()) / 2
@@ -52,7 +75,12 @@ class LevelOne(AbstractLevel):
 
         if self.timer is not 0:
             self.timer -= dt
-        elif not pygame.mixer.music.get_busy():
+        else:
+            self.timer_to_leave += dt
+            
+
+        if self.timer_to_leave > 2:
+            self.reset()
             game.set_state(_GameState.LEVEL_SELECT)
 
         if (self.timer < 0):
@@ -63,8 +91,24 @@ class LevelOne(AbstractLevel):
                 game.level_select.unlocked_level[self.index] = True
             else:
                 self.lose_sound.play()
-        elif rand(30) == 0 and self.timer is not 0:
-            self.mole_entities.append(Mole(pos=(rand(100, self.display.get_width()-100),rand(50, self.display.get_height() - 50))))
+        elif rand(15) == 0 and self.timer is not 0:
+            loc = rand(0, 9)
+
+            if not any(cover_door.hole_num == loc for cover_door in self.burrow_cover_list):
+                #self.mole_entities.append(Mole(self.mole_entities, pos=self.mole_hole_locs[loc]))
+                
+                # There's not any trapdoor
+                if not any(trap_door.hole_num == loc for trap_door in self.trap_door_list):
+                    # Add the mole
+                    self.mole_entities.append(Mole(self.mole_entities, pos=self.mole_hole_locs[loc]))
+                # There is a trap door at loc
+                else:
+                    print("trap door caught mole!")
+                    mole = Mole(self.mole_entities, pos=self.mole_hole_locs[loc])
+                    self.mole_entities.append(mole)
+                    mole.die()
+                    self.kill_count += 1
+
 
 
     def draw(self):
@@ -74,12 +118,28 @@ class LevelOne(AbstractLevel):
         self.display.blit(self.ground, self.ground.get_rect())
         self.display.blit(self.clouds, self.clouds.get_rect())
 
-        self.display.blit(self.timer_text, self.timer_text_pos)
-        self.display.blit(self.kill_count_text, self.kill_count_text_pos)
+        self.draw_mole_holes()
+
+        self.explode_button.draw()
+        self.slow_down_button.draw()
+        self.trap_door_button.draw()
+        self.burrow_cover_button.draw()
+
+
+        for burrow_cover in [(m.sprite, m.hole_num) for m in self.burrow_cover_list]:
+            x, y = self.mole_hole_locs[burrow_cover[1]]
+            self.display.blit(burrow_cover[0], (x-burrow_cover[0].get_width()/2, y-burrow_cover[0].get_height()/2))
+
+        for trap_door in [(t.sprite, t.hole_num) for t in self.trap_door_list]:
+            x, y = self.mole_hole_locs[trap_door[1]]
+            self.display.blit(trap_door[0], (x-trap_door[0].get_width()/2, y-trap_door[0].get_height()/2))
 
         for mole in [(m.sprite, m.position) for m in self.mole_entities]:
             self.display.blit(mole[0], mole[1])
 
+           
+        self.display.blit(self.timer_text, self.timer_text_pos)
+        self.display.blit(self.kill_count_text, self.kill_count_text_pos)
         # Nothing comes after this
         self.display.blit(pygame.transform.flip(self.cursor_img, True, False), self.cursor_img_rect)
 
@@ -101,5 +161,25 @@ class LevelOne(AbstractLevel):
                         #self.mol
                     
                     i -= 1
+
+            if (self.explode_button.contains(pos)):
+                self.explode()
+            elif (self.slow_down_button.contains(pos)):
+                if len(self.mole_entities) > 0:
+                    self.slow_down_moles(self.mole_entities[0].lifespan*2.0)
+            elif self.burrow_cover_button.contains(pos):
+                
+                options = list(set(range(9)) - set([cover_door.hole_num for cover_door in self.burrow_cover_list] + [trap_door.hole_num for trap_door in self.trap_door_list]))
+                if len(options) == 0:
+                    return
+                loc = rand(0, len(options))
+                self.burrow_cover_list.append(Burrow(self.burrow_cover_list, options[loc], lifespan=10))
+            
+            elif self.trap_door_button.contains(pos):
+                options = list(set(range(9)) - set([cover_door.hole_num for cover_door in self.burrow_cover_list] + [trap_door.hole_num for trap_door in self.trap_door_list]))
+                if len(options) == 0:
+                    return
+                loc = rand(0, len(options))
+                self.trap_door_list.append(TrapDoor(self.trap_door_list, options[loc], lifespan=10))
 
 

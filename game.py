@@ -36,7 +36,7 @@ class WhackAMole:
 
         pygame.init()
         pygame.mixer.init()
-        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.set_volume(0.01)
 
         # Set up display
         self.display = pygame.display.set_mode((1000, 600))
