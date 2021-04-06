@@ -134,7 +134,7 @@ def show_score(x,y):
 
 #displaying score
 def show_time(t,x,y):
-    time = font.render("Time: " + str(t/1000), True, WHITE)
+    time = font.render("Time: " + str(4), True, WHITE)
     display.blit(time, (x, y))
 
 #create burrows for moles
@@ -248,6 +248,7 @@ slowdown=False
 #if DDOS countermeasure is active
 fiveSeconds = True
 
+mole_pause = False
 
 while run:
     #time
@@ -274,11 +275,14 @@ while run:
 
     display.fill(GREEN)
     Burrows()
-    mole_pos = Moles()
-    modified_mole_pos = list(mole_pos)
-    modified_mole_pos[0] = mole_pos[0] + 7
-    modified_mole_pos[1] = mole_pos[1] + 9
-    mole_pos = tuple(modified_mole_pos)
+
+    if(not mole_pause):
+        mole_pos = Moles()
+        modified_mole_pos = list(mole_pos)
+        modified_mole_pos[0] = mole_pos[0] + 7
+        modified_mole_pos[1] = mole_pos[1] + 9
+        mole_pos = tuple(modified_mole_pos)
+
     clock.tick(60)
     show_score(textX,textY)
     #draw button
@@ -310,35 +314,87 @@ while run:
         elif event.type == pygame.KEYDOWN:
             print("key pressed")
             if event.key == pygame.K_b:
+                mole_pause = True
                 event = pygame.event.wait()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_1:
                         print("1")
                         BurrowCover(0)
+                        mole_pause = False
                     elif event.key == pygame.K_2:
                         print("2")
                         BurrowCover(1)
+                        mole_pause = False
                     elif event.key == pygame.K_3:
-                        BurrowCover(2)
                         print("3")
+                        BurrowCover(2)
+                        mole_pause = False
                     elif event.key == pygame.K_4:
-                        BurrowCover(3)
                         print("4")
+                        BurrowCover(3)
+                        mole_pause = False
                     elif event.key == pygame.K_5:
-                        BurrowCover(4)
                         print("5")
+                        BurrowCover(4)
+                        mole_pause = False
                     elif event.key == pygame.K_6:
-                        BurrowCover(5)
                         print("6")
+                        BurrowCover(5)
+                        mole_pause = False
                     elif event.key == pygame.K_7:
-                        BurrowCover(6)
                         print("7")
+                        BurrowCover(6)
+                        mole_pause = False
                     elif event.key == pygame.K_8:
-                        BurrowCover(7)
                         print("8")
+                        BurrowCover(7)
+                        mole_pause = False
                     elif event.key == pygame.K_9:
-                        BurrowCover(8)
                         print("9")
+                        BurrowCover(8)
+                        mole_pause = False
+            if event.key == pygame.K_t:
+                print("clicked button 2")
+                mole_pause = True
+                event = pygame.event.wait()
+                if event.type == pygame.KEYDOWN:
+                    print("key pressed")
+                    if event.key == pygame.K_1:
+                        print("1")
+                        PlaceTrapDoor(0)
+                        mole_pause = False
+                    elif event.key == pygame.K_2:
+                        print("2")
+                        PlaceTrapDoor(1)
+                        mole_pause = False
+                    elif event.key == pygame.K_3:
+                        print("3")
+                        PlaceTrapDoor(2)
+                        mole_pause = False
+                    elif event.key == pygame.K_4:
+                        print("4")
+                        PlaceTrapDoor(3)
+                        mole_pause = False
+                    elif event.key == pygame.K_5:
+                        print("5")
+                        PlaceTrapDoor(4)
+                        mole_pause = False
+                    elif event.key == pygame.K_6:
+                        print("6")
+                        PlaceTrapDoor(5)
+                        mole_pause = False
+                    elif event.key == pygame.K_7:
+                        print("7")
+                        PlaceTrapDoor(6)
+                        mole_pause = False
+                    elif event.key == pygame.K_8:
+                        print("8")
+                        PlaceTrapDoor(7)
+                        mole_pause = False
+                    elif event.key == pygame.K_9:
+                        print("9")
+                        PlaceTrapDoor(8)
+                        mole_pause = False
 
         elif event.type == MOUSEBUTTONDOWN:
             
@@ -348,38 +404,9 @@ while run:
             #print("test")
             
 
-            if TrapMolesIntoAHoleButton.inRange(pos):
-                print("clicked button 2")
-                event = pygame.event.wait()
-                if event.type == pygame.KEYDOWN:
-                    print("key pressed")
-                    if event.key == pygame.K_1:
-                        print("1")
-                        PlaceTrapDoor(0)
-                    elif event.key == pygame.K_2:
-                        print("2")
-                        PlaceTrapDoor(1)
-                    elif event.key == pygame.K_3:
-                        PlaceTrapDoor(2)
-                        print("3")
-                    elif event.key == pygame.K_4:
-                        PlaceTrapDoor(3)
-                        print("4")
-                    elif event.key == pygame.K_5:
-                        PlaceTrapDoor(4)
-                        print("5")
-                    elif event.key == pygame.K_6:
-                        PlaceTrapDoor(5)
-                        print("6")
-                    elif event.key == pygame.K_7:
-                        PlaceTrapDoor(6)
-                        print("7")
-                    elif event.key == pygame.K_8:
-                        PlaceTrapDoor(7)
-                        print("8")
-                    elif event.key == pygame.K_9:
-                        PlaceTrapDoor(8)
-                        print("9")
+           # if TrapMolesIntoAHoleButton.inRange(pos):
+                
+                        
 
             if ExplodeMolesButton.inRange(pos):
                 print("clicked button 3")
