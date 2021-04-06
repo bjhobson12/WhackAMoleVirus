@@ -1,10 +1,12 @@
 import pygame
 import time
-from pygame.locals import MOUSEBUTTONDOWN
+from pygame.locals import MOUSEBUTTONDOWN, KEYDOWN
 import pygame.freetype
 import math
 import random
 import logging,sys
+
+
 
 #colors
 WHITE = (255,255,255)
@@ -15,7 +17,6 @@ OFF_WHITE = (245,242,208)
 GREY = (266,220,205)
 BROWN = (195,155,119)
 TRANSPARENT = (0,0,0)
-
 pygame.init()
 
 #set up display
@@ -29,7 +30,6 @@ burrow_rad = scrWidth // 16
 
 #timer vars
 clock = pygame.time.Clock()
-
 
 #score vars
 score_value = 0
@@ -46,12 +46,12 @@ whackedMole_image = pygame.image.load("whackedMole.png")
 whackedMole_mod_image = pygame.transform.scale(whackedMole_image, (75,84))
 
 #load door image (for counter measure)
-door_image = pygame.image.load("door.jpg")
-door_mod_image = pygame.transform.scale(door_image, (40,40))
+door_image = pygame.image.load("door.png")
+door_mod_image = pygame.transform.scale(door_image, (100,115))
 
 #load trap door image (for counter measure)
 trap_door_image = pygame.image.load("trap_door.png")
-trap_door_mod_image = pygame.transform.scale(trap_door_image, (40,40))
+trap_door_mod_image = pygame.transform.scale(trap_door_image, (80,90))
 
 #antivirus image
 AVS_image = pygame.image.load("AVS.png")
@@ -73,6 +73,10 @@ ddos_mod_image = pygame.transform.scale(ddos_image, (100,100))
 idps_image = pygame.image.load("idps.png")
 idps_mod_image = pygame.transform.scale(idps_image, (100,100))
 
+#explosion image
+explosion_image = pygame.image.load("boom.png")
+explosion_mod_image = pygame.transform.scale(explosion_image, (100,90))
+
 #burrow and mole pos
 burrow_x = -100
 burrow_y = 175
@@ -82,8 +86,6 @@ molePosList = []
 doorPositions = []
 trapDoorPositions=[]
 points =0
-
-
 
 while count != 9:
     count+=1
@@ -147,9 +149,7 @@ def Moles():
     pos = random.choice(molePosList)
     while pos[0] == 0 and pos[1] == 0:
         pos = random.choice(molePosList)
-    if len(doorPositions) > 0:
-        for i in doorPositions:
-            display.blit(door_mod_image, i)
+    
     if len(trapDoorPositions) > 0:
         for j in trapDoorPositions:
             display.blit(trap_door_mod_image, j)
@@ -172,20 +172,24 @@ def Distance(a, b):
     return l
 
 #create buttons
-doorCoveringHoleButton = button(OFF_WHITE,50,65,100,50,"Burrow Cover")
+BurrowCoverButton = button(OFF_WHITE,50,65,100,50,"Burrow Cover")
 TrapMolesIntoAHoleButton = button(OFF_WHITE,200,65,100,50,"Trap Door")
-GetRidOfMolesForFiveSecondsButton = button(OFF_WHITE,350,65,100,50,"Disruption")
+ExplodeMolesButton = button(OFF_WHITE,350,65,100,50,"Disruption")
 SlowDownMolesButton = button(OFF_WHITE,500,65,100,50,"Slow Down")
 
 #gets rid of moles for five seconds
-def GetRidOfMolesForFiveSeconds():
+def ExplodeMoles():
     #re-creates the white burrows
+    score_value = 0
     circles = int(-1)
     
     while circles != len(burrowPosList) - 1:
         circles += 1
-        pygame.draw.circle(display, WHITE, burrowPosList[circles], burrow_rad)
+        display.blit(explosion_mod_image, (burrowPosList[circles][0] -50, burrowPosList[circles][1]-50))
+        #pygame.draw.circle(display, explosion_mod_image, burrowPosList[circles], burrow_rad)
 
+    score_value += 9
+    return score_value
     #time.sleep(5)
     
 
@@ -196,12 +200,13 @@ def GetRidOfMolesForFiveSeconds():
 
 
 #covers the door so that the mole will not show
-def DoorCoveringHole(doorPosition):
+def BurrowCover(doorPosition):
     #blocks our hole
     #print(molePosList[doorPosition])
     display.blit(AVS_mod_image, (0,100))
     doorPositions.append(molePosList[doorPosition])
     molePosList[doorPosition] = (0,0)
+    
     
 
 
@@ -211,7 +216,7 @@ def TrapMolesIntoAHole(mole_pos):
     for burrow in trapDoorPositions:
         #print(burrow)
         score_value = 0
-        if (abs(mole_pos[0] - burrow[0]) < 7.25):
+        if (abs(mole_pos[0] - burrow[0]) < 50 and abs(mole_pos[1] - burrow[1]) < 50):
             #display a message saying that the trap door caught the mole
             print("ew! the honeypot caught one of em moles!")
             score_value += 1
@@ -277,12 +282,16 @@ while run:
     clock.tick(60)
     show_score(textX,textY)
     #draw button
-    doorCoveringHoleButton.draw(display, BLACK)
+    BurrowCoverButton.draw(display, BLACK)
     TrapMolesIntoAHoleButton.draw(display, BLACK)
-    GetRidOfMolesForFiveSecondsButton.draw(display, BLACK)
+    ExplodeMolesButton.draw(display, BLACK)
     SlowDownMolesButton.draw(display, BLACK)
     #button clicked tracker
     button_selected = False
+    #draw burrow covers:
+    if len(doorPositions) > 0:
+        for i in doorPositions:
+            display.blit(door_mod_image, (i[0] - 8, i[1] - 3))
 
     pygame.display.update()
 
@@ -298,45 +307,46 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
+        elif event.type == pygame.KEYDOWN:
+            print("key pressed")
+            if event.key == pygame.K_b:
+                event = pygame.event.wait()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        print("1")
+                        BurrowCover(0)
+                    elif event.key == pygame.K_2:
+                        print("2")
+                        BurrowCover(1)
+                    elif event.key == pygame.K_3:
+                        BurrowCover(2)
+                        print("3")
+                    elif event.key == pygame.K_4:
+                        BurrowCover(3)
+                        print("4")
+                    elif event.key == pygame.K_5:
+                        BurrowCover(4)
+                        print("5")
+                    elif event.key == pygame.K_6:
+                        BurrowCover(5)
+                        print("6")
+                    elif event.key == pygame.K_7:
+                        BurrowCover(6)
+                        print("7")
+                    elif event.key == pygame.K_8:
+                        BurrowCover(7)
+                        print("8")
+                    elif event.key == pygame.K_9:
+                        BurrowCover(8)
+                        print("9")
 
         elif event.type == MOUSEBUTTONDOWN:
             
             pos = pygame.mouse.get_pos()
 
-            TrapMolesIntoAHole(mole_pos)
+            #TrapMolesIntoAHole(mole_pos)
             #print("test")
-            if doorCoveringHoleButton.inRange(pos):
-                print("clicked button 1")
-                event = pygame.event.wait()
-                if event.type == pygame.KEYDOWN:
-                    print("key pressed")
-                    if event.key == pygame.K_1:
-                        print("1")
-                        DoorCoveringHole(0)
-                    elif event.key == pygame.K_2:
-                        print("2")
-                        DoorCoveringHole(1)
-                    elif event.key == pygame.K_3:
-                        DoorCoveringHole(2)
-                        print("3")
-                    elif event.key == pygame.K_4:
-                        DoorCoveringHole(3)
-                        print("4")
-                    elif event.key == pygame.K_5:
-                        DoorCoveringHole(4)
-                        print("5")
-                    elif event.key == pygame.K_6:
-                        DoorCoveringHole(5)
-                        print("6")
-                    elif event.key == pygame.K_7:
-                        DoorCoveringHole(6)
-                        print("7")
-                    elif event.key == pygame.K_8:
-                        DoorCoveringHole(7)
-                        print("8")
-                    elif event.key == pygame.K_9:
-                        DoorCoveringHole(8)
-                        print("9")
+            
 
             if TrapMolesIntoAHoleButton.inRange(pos):
                 print("clicked button 2")
@@ -371,18 +381,18 @@ while run:
                         PlaceTrapDoor(8)
                         print("9")
 
-            if GetRidOfMolesForFiveSecondsButton.inRange(pos):
+            if ExplodeMolesButton.inRange(pos):
                 print("clicked button 3")
-                GetRidOfMolesForFiveSeconds()
+                points = ExplodeMoles()
+                if (points is not None):
+                    if points > 0:
+                        score_value += points
                 display.blit(ddos_mod_image, (0,100))
 
             if SlowDownMolesButton.inRange(pos):
                 display.blit(idps_mod_image, (0,100))
                 print("clicked button 4")
                 slowdown=True
-
-
-            
                 button_selected= True
         
             if(not button_selected):
