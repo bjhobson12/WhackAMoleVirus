@@ -53,26 +53,6 @@ door_mod_image = pygame.transform.scale(door_image, (100,115))
 trap_door_image = pygame.image.load("trap_door.png")
 trap_door_mod_image = pygame.transform.scale(trap_door_image, (80,90))
 
-#antivirus image
-AVS_image = pygame.image.load("AVS.png")
-AVS_mod_image = pygame.transform.scale(AVS_image, (100,100))
-
-#honeypot image
-honeypot_image = pygame.image.load("honeypot.png")
-honeypot_mod_image = pygame.transform.scale(honeypot_image, (100,100))
-
-#slow down image
-overlay_image = pygame.image.load("Sleep.png")
-sleep_mod_image = pygame.transform.scale(overlay_image, (100,100))
-
-#slow down image
-ddos_image = pygame.image.load("ddos.png")
-ddos_mod_image = pygame.transform.scale(ddos_image, (100,100))
-
-#slow down image
-idps_image = pygame.image.load("idps.png")
-idps_mod_image = pygame.transform.scale(idps_image, (100,100))
-
 #explosion image
 explosion_image = pygame.image.load("boom.png")
 explosion_mod_image = pygame.transform.scale(explosion_image, (100,90))
@@ -191,8 +171,6 @@ def ExplodeMoles():
     score_value += 9
     return score_value
     #time.sleep(5)
-    
-
 
     #displays original door(s), trap door(s)
     #display.blit(door_mod_image, 0,0)
@@ -203,7 +181,6 @@ def ExplodeMoles():
 def BurrowCover(doorPosition):
     #blocks our hole
     #print(molePosList[doorPosition])
-    display.blit(AVS_mod_image, (0,100))
     doorPositions.append(molePosList[doorPosition])
     molePosList[doorPosition] = (0,0)
     
@@ -414,6 +391,7 @@ while run:
                     if points > 0:
                         score_value += points
                 point_booster = 0
+                button_selected = True
                 
             if SlowDownMolesButton.inRange(pos):
                 print("clicked button 4")
