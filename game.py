@@ -174,7 +174,7 @@ def Distance(a, b):
 #create buttons
 doorCoveringHoleButton = button(OFF_WHITE,50,65,100,50,"Burrow Cover")
 TrapMolesIntoAHoleButton = button(OFF_WHITE,200,65,100,50,"Trap Door")
-GetRidOfMolesForFiveSecondsButton = button(OFF_WHITE,350,65,100,50,"Five Seconds")
+GetRidOfMolesForFiveSecondsButton = button(OFF_WHITE,350,65,100,50,"Disruption")
 SlowDownMolesButton = button(OFF_WHITE,500,65,100,50,"Slow Down")
 
 #gets rid of moles for five seconds
