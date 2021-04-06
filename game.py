@@ -198,6 +198,7 @@ fiveSeconds = True
 
 while run:
     
+<<<<<<< HEAD
     x,y = pygame.mouse.get_pos()
     
     for i in range(len(burrowPosList) - 1):
@@ -207,12 +208,19 @@ while run:
 
 
 
+=======
+>>>>>>> Jonathan
     #time
     
     pygame.display.flip()
     passed_time = pygame.time.get_ticks()
+<<<<<<< HEAD
     #print(passed_time)
     #show_time(passed_time,400,10)
+=======
+    print(passed_time)
+    show_time(passed_time,400,10)
+>>>>>>> Jonathan
 
     display.fill(GREEN)
     Burrows()
@@ -221,9 +229,13 @@ while run:
     modified_mole_pos[0] = mole_pos[0] + 7
     modified_mole_pos[1] = mole_pos[1] + 9
     mole_pos = tuple(modified_mole_pos)
+<<<<<<< HEAD
 
     clock.tick(60)
 
+=======
+    clock.tick(60)
+>>>>>>> Jonathan
     show_score(textX,textY)
     #draw button
     trapdoorButton.draw(display, BLACK)
