@@ -145,7 +145,7 @@ def Burrows():
         pygame.draw.circle(display, BROWN, burrowPosList[circles], burrow_rad)
 
 #create moles
-def Moles():
+def Moles(t):
     pos = random.choice(molePosList)
     while pos[0] == 0 and pos[1] == 0:
         pos = random.choice(molePosList)
@@ -154,7 +154,7 @@ def Moles():
         for j in trapDoorPositions:
             display.blit(trap_door_mod_image, j)
     display.blit(mole_mod_image, pos)
-    time.sleep(2)
+    time.sleep(t)
     return pos
 
 #Jon's push for Moles
@@ -248,11 +248,19 @@ slowdown=False
 #if DDOS countermeasure is active
 fiveSeconds = True
 
+#temp pause for moles moving
 mole_pause = False
 
+#mole timing
+mole_timer = 2
+
+#point boost tracker
+point_booster = 0
+
 while run:
+    mole_timer = 2
+
     #time
-    
     pygame.display.flip()
     passed_time = pygame.time.get_ticks()
 
@@ -265,7 +273,10 @@ while run:
 
     points = TrapMolesIntoAHole(mole_pos)
 
-    #print(points)
+    # #firewall countermeasure; set by boolean, slows down moles indicated by value passed in Moles
+    if slowdown:
+        display.blit(sleep_mod_image, (0,100))
+        mole_timer = 4
 
     #add points for honeypot
     if (points is not None):
@@ -277,7 +288,7 @@ while run:
     Burrows()
 
     if(not mole_pause):
-        mole_pos = Moles()
+        mole_pos = Moles(mole_timer)
         modified_mole_pos = list(mole_pos)
         modified_mole_pos[0] = mole_pos[0] + 7
         modified_mole_pos[1] = mole_pos[1] + 9
@@ -299,11 +310,7 @@ while run:
 
     pygame.display.update()
 
-    # #firewall countermeasure; set by boolean, slows down moles indicated by value passed in Moles
-    if slowdown:
-        display.blit(sleep_mod_image, (0,100))
-        #display moles
-        time.sleep(4)
+    
 
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
@@ -353,7 +360,7 @@ while run:
                         print("9")
                         BurrowCover(8)
                         mole_pause = False
-            if event.key == pygame.K_t:
+            elif event.key == pygame.K_t:
                 print("clicked button 2")
                 mole_pause = True
                 event = pygame.event.wait()
@@ -398,15 +405,7 @@ while run:
 
         elif event.type == MOUSEBUTTONDOWN:
             
-            pos = pygame.mouse.get_pos()
-
-            #TrapMolesIntoAHole(mole_pos)
-            #print("test")
-            
-
-           # if TrapMolesIntoAHoleButton.inRange(pos):
-                
-                        
+            pos = pygame.mouse.get_pos()                
 
             if ExplodeMolesButton.inRange(pos):
                 print("clicked button 3")
@@ -414,13 +413,13 @@ while run:
                 if (points is not None):
                     if points > 0:
                         score_value += points
-                display.blit(ddos_mod_image, (0,100))
-
+                point_booster = 0
+                
             if SlowDownMolesButton.inRange(pos):
-                display.blit(idps_mod_image, (0,100))
                 print("clicked button 4")
                 slowdown=True
-                button_selected= True
+                button_selected = True
+                point_booster += 2
         
             if(not button_selected):
                 #print('mouse')
@@ -432,6 +431,6 @@ while run:
                         print('caught')
                         display.blit(whackedMole_mod_image, mole_pos)
                         time.sleep(1.5)
-                        score_value += 1
+                        score_value += 1 + point_booster
     
 pygame.quit() 
