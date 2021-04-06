@@ -181,12 +181,6 @@ while run:
     #honeypot countermeasure; displays image if mole in same position as door
     #TrapMolesIntoAHole(playerCurrentPosition, trapdoorCurrentPosition)
 
-
-
-
-
-
-
     #clock
     clock.tick(60)
    
