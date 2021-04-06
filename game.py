@@ -73,7 +73,7 @@ molePosList = []
 doorPositions = []
 trapDoorPositions=[]
 
-while count != 9:
+while count != 2:
     count+=1
     burrow_x += 213.3
     if burrow_x >= scrWidth:
@@ -154,7 +154,7 @@ def Distance(a, b):
     return l
 
 #create buttons
-trapdoorButton = button(OFF_WHITE,50,65,100,50,"TrapDoor")
+doorCoveringHoleButton = button(OFF_WHITE,50,65,100,50,"Burrow Cover")
 
 #gets rid of moles for five seconds
 def GetRidOfMolesForFiveSeconds(playerCurrentPosition, doorPositions, trapDoorPositions):
@@ -169,14 +169,11 @@ def GetRidOfMolesForFiveSeconds(playerCurrentPosition, doorPositions, trapDoorPo
     time.sleep(5)
 
 #covers the door so that the mole will not show
-def DoorCoveringHole(moleCurrentPosition, doorPositions):
-    #checks if moleis in position of door
-    for burrow in doorPositions:
-        if (moleCurrentPosition == burrow):
-            #display a message saying that the door blocked the mole
-            display.blit(overlay_mod_image, (0,0))
+def DoorCoveringHole(doorPosition):
+    #blocks our hole
+    del molePosList[doorPosition]
 
-#creates a honeypot for the mole
+#creates a honeypot for the mole; if mole gets trapped, immediately get points for it
 def TrapMolesIntoAHole(moleCurrentPosition, trapDoorPositions):
     for burrow in trapDoorPositions:
         if (moleCurrentPosition == burrow):
@@ -226,7 +223,7 @@ while run:
     clock.tick(60)
     show_score(textX,textY)
     #draw button
-    trapdoorButton.draw(display, BLACK)
+    doorCoveringHoleButton.draw(display, BLACK)
     #button clicked tracker
     button_selected = False
 
@@ -237,30 +234,58 @@ while run:
 
         if event.type == pygame.QUIT:
             run = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_1:
-                print("sup")
 
 
-        # elif event.type == MOUSEBUTTONDOWN:
+        elif event.type == MOUSEBUTTONDOWN:
             
-        #     # #firewall countermeasure; set by boolean, slows down moles indicated by value passed in Moles
-        #     # if slowdown:
-        #     #     #display moles
-        #     #     Moles(moleCurrentPosition, doorCurrentPosition,4)
-        #     #     #displays image saying that moles are being slowed
-        #     #     display.blit(sleep_mod_image, (0,100))
-        #     # else:
+            # #firewall countermeasure; set by boolean, slows down moles indicated by value passed in Moles
+            # if slowdown:
+            #     #display moles
+            #     Moles(moleCurrentPosition, doorCurrentPosition,4)
+            #     #displays image saying that moles are being slowed
+            #     display.blit(sleep_mod_image, (0,100))
+            # else:
 
-        #     #Moles(moleCurrentPosition, doorCurrentPosition,1)
+            #Moles(moleCurrentPosition, doorCurrentPosition,1)
 
+            # pos = pygame.mouse.get_pos()
+            # if trapdoorButton.inRange(pos):
+            #     print("clicked button")
+            #     if event.type == pygame.KEYDOWN:
+            #         if event.key == pygame.K_1:
+            #             print("sup")
+            #             button_selected= True
+            
             pos = pygame.mouse.get_pos()
-            if trapdoorButton.inRange(pos):
+            if doorCoveringHoleButton.inRange(pos):
                 print("clicked button")
+                event = pygame.event.wait()
                 if event.type == pygame.KEYDOWN:
+                    print("key pressed")
                     if event.key == pygame.K_1:
-                        print("sup")
-                        button_selected= True
+                        print("1")
+                        DoorCoveringHole(1)
+                    elif event.key == pygame.K_2:
+                        DoorCoveringHole(2)
+                    elif event.key == pygame.K_3:
+                        DoorCoveringHole(3)
+                    elif event.key == pygame.K_4:
+                        DoorCoveringHole(4)
+                    elif event.key == pygame.K_5:
+                        DoorCoveringHole(5)
+                    elif event.key == pygame.K_6:
+                        DoorCoveringHole(6)
+                    elif event.key == pygame.K_7:
+                        DoorCoveringHole(7)
+                    elif event.key == pygame.K_8:
+                        DoorCoveringHole(8)
+                    elif event.key == pygame.K_9:
+                        DoorCoveringHole(9)
+                button_selected= True
+                
+
+
+
 
 
         #     #DDOS countermeasure; set by a boolean, gets rid of moles for 5 seconds
@@ -278,17 +303,17 @@ while run:
 
 
                 
-        #     if(not button_selected):
-        #         print('mouse')
-        #         # Loop through every burrow point, checking the distance
-        #         for i, burrow_point in enumerate(burrowPosList):
-        #             #print('in loop')
-        #             if Distance(pos, burrow_point) < burrow_rad:
-        #                 # Burrow was clicked
-        #                 print('caught')
-        #                 display.blit(whackedMole_mod_image, mole_pos)
-        #                 time.sleep(1.5)
-        #                 score_value += 1
+            if(not button_selected):
+                print('mouse')
+                # Loop through every burrow point, checking the distance
+                for i, burrow_point in enumerate(burrowPosList):
+                    #print('in loop')
+                    if Distance(pos, burrow_point) < burrow_rad:
+                        # Burrow was clicked
+                        print('caught')
+                        display.blit(whackedMole_mod_image, mole_pos)
+                        time.sleep(1.5)
+                        score_value += 1
     
 
 pygame.quit() 
