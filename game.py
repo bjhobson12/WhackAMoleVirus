@@ -197,30 +197,13 @@ slowdown=True
 fiveSeconds = True
 
 while run:
-    
-<<<<<<< HEAD
-    x,y = pygame.mouse.get_pos()
-    
-    for i in range(len(burrowPosList) - 1):
-        if x > burrowPosList[i] and x < burrowPosList[i] + burrow_rad:
-            if y > burrowPosList[i+1] and y < burrowPosList[i+1] + burrow_rad:
-                print("burrow: ")
 
-
-
-=======
->>>>>>> Jonathan
     #time
     
     pygame.display.flip()
     passed_time = pygame.time.get_ticks()
-<<<<<<< HEAD
     #print(passed_time)
     #show_time(passed_time,400,10)
-=======
-    print(passed_time)
-    show_time(passed_time,400,10)
->>>>>>> Jonathan
 
     display.fill(GREEN)
     Burrows()
@@ -229,13 +212,9 @@ while run:
     modified_mole_pos[0] = mole_pos[0] + 7
     modified_mole_pos[1] = mole_pos[1] + 9
     mole_pos = tuple(modified_mole_pos)
-<<<<<<< HEAD
 
     clock.tick(60)
 
-=======
-    clock.tick(60)
->>>>>>> Jonathan
     show_score(textX,textY)
     #draw button
     trapdoorButton.draw(display, BLACK)
@@ -261,9 +240,18 @@ while run:
             # else:
             #     Moles(moleCurrentPosition, doorCurrentPosition,1)
             #         #pos = pygame.mouse.get_pos()
-            #         if trapdoorButton.inRange(pos):
-            #             print("clicked button")
-            #             button_selected= True
+            if trapdoorButton.inRange(pos):
+                print("clicked button")
+                button_selected= True
+                burrows_selected = False
+                if not burrows_selected:
+                    for i in range(len(burrowPosList) - 1):
+                        if pos[0] > burrowPosList[i][0] and pos[0] < burrowPosList[i][0] + burrow_rad:
+                            if pos[1] > burrowPosList[i][1] and pos[1] < burrowPosList[i][1] + burrow_rad:
+                                print("burrow: ")
+                                print(i)
+                                burrows_selected = True
+
 
 
             #DDOS countermeasure; set by a boolean, gets rid of moles for 5 seconds
@@ -279,8 +267,6 @@ while run:
             #honeypot countermeasure; displays image if mole in same position as door
             #TrapMolesIntoAHole(playerCurrentPosition, trapdoorCurrentPosition)
 
-
-                
             if(not button_selected):
                 print('mouse')
                 # Loop through every burrow point, checking the distance
