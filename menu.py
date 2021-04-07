@@ -12,7 +12,9 @@ from menustate import _MenuState
 from utility import easeInBounce, easeOutBound
 import math
 
-
+"""
+This class was written primarily by Jonathan Nguyen for structuring the menu
+"""
 class Menu:
 
     RELATIVE_PATH_LIST = ['assets']

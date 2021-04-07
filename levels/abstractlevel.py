@@ -6,6 +6,10 @@
 import pygame
 import os
 
+
+"""
+This class was written primarily by Benjamin Hobson to make level implementation uniform
+"""
 class AbstractLevel:
 
     RELATIVE_PATH_LIST = ["assets"]

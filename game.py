@@ -18,6 +18,9 @@ from levelselect import LevelSelect
 from sprites.playerSprite import PlayerSprite
 from gamestate import _GameState
 
+"""
+This class was written primarily by Ben Hobson for structuring the game
+"""
 class WhackAMole:
 
     # Colors
