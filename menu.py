@@ -144,7 +144,7 @@ class Menu:
             return
         # Do stuff
         if state == _MenuState.TRANSITION_IN:
-            pygame.mixer.music.load(os.path.join( './assets', 'audio', "mixkit-games-worldbeat-466.mp3"))
+            pygame.mixer.music.load(os.path.join('assets', 'audio', "mixkit-games-worldbeat-466.mp3"))
             pygame.mixer.music.play(-1, fade_ms=Menu.TRANSITION_DELAY*1000)
             self.counter = 0
         elif state == _MenuState.STATIC:
