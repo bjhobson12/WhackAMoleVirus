@@ -34,14 +34,21 @@ class LevelSelect:
         self.select_sound.set_volume(0.05)
         self.locked_sound = pygame.mixer.Sound(os.path.join('./', *LevelSelect.RELATIVE_PATH_LIST, 'audio', 'mixkit-quick-lock-sound-2854.wav'))
         self.locked_sound.set_volume(0.05)
+        self.unlock_sound = pygame.mixer.Sound(os.path.join('./', *LevelSelect.RELATIVE_PATH_LIST, 'audio', 'mixkit-unlock-new-item-game-notification-254.wav'))
+        self.unlock_sound.set_volume(0.05)
 
 
         self.cursor_img = self.load_img("hammer.png")
 
         self.cursor_img_rect = self.cursor_img.get_rect()
 
-        self.forward_button = Button(self.display, pygame.transform.scale(self.load_img('b_7.png', add_sub_dir=['ui_gold']), (50,50)), ((self.display.get_width() + 50)/2, self.display.get_height()*0.85))
-        self.backward_button = Button(self.display, pygame.transform.scale(self.load_img('b_6.png', add_sub_dir=['ui_gold']), (50,50)), ((self.display.get_width() + 50)/2-100, self.display.get_height()*0.85))
+        self.money_icon = pygame.transform.scale(self.load_img('c.png', add_sub_dir=['ui_gold']), (30,30))
+        self.money_icon_pos = self.money_icon.get_rect()
+        self.money_icon_pos.x = self.display.get_width()*0.90
+        self.money_icon_pos.y = 10
+        self.money_text = self.font_small.render('{}'.format(0), True, (255, 255, 255))
+        self.forward_button = Button(self.display, pygame.transform.scale(self.load_img('b_7.png', add_sub_dir=['ui_gold']), (50,50)), ((self.display.get_width() + 50)/2+25, self.display.get_height()*0.85))
+        self.backward_button = Button(self.display, pygame.transform.scale(self.load_img('b_6.png', add_sub_dir=['ui_gold']), (50,50)), ((self.display.get_width() + 50)/2-75, self.display.get_height()*0.85))
 
         self.backward_button.disabled = True
 
@@ -163,6 +170,8 @@ class LevelSelect:
 
         self.unlocked_level = [True] + [False]*8
 
+        self.num_unlocked_levels = 1
+        
         self.current_level = self.levels[0]
         
         self.title_text = self.font.render('Select Level', True, (110, 60, 19))
@@ -179,6 +188,12 @@ class LevelSelect:
         self.clouds_pos = self.clouds_pos.move(-self.cloud_speed,0)
         if self.clouds_pos.width+self.clouds_pos.x <= 0:
             self.clouds_pos.x = self.display.get_width()*1.2
+        
+        if self.num_unlocked_levels != sum(self.unlocked_level):
+            self.num_unlocked_levels = sum(self.unlocked_level)
+            self.unlock_sound.play()
+
+        self.money_text = self.font_small.render('{}'.format(game.coins), True, (255, 255, 255))
 
         if self.state == _LevelSelectState.TRANSITION_RIGHT or self.state == _LevelSelectState.TRANSITION_LEFT:
             self.counter += dt
@@ -297,9 +312,14 @@ class LevelSelect:
         self.backward_button.draw()
         self.forward_button.draw()
 
+        self.display.blit(self.money_icon, self.money_icon_pos)
+        self.display.blit(self.money_text, (self.money_icon_pos[0] + 50, self.money_icon_pos[1] + 10))
+
         
         # Nothing comes after this
         self.display.blit(pygame.transform.flip(self.cursor_img, True, False), self.cursor_img_rect)
+        
+        pygame.draw.circle(self.display, (255, 255, 255), (self.cursor_img_rect[0] + 13, self.cursor_img_rect[1] + 51), 30*max(0, (3 - self.play_counter)/3), width=2)
 
 
     def set_state(self, state):

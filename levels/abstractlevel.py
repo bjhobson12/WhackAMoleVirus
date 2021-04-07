@@ -29,6 +29,10 @@ class AbstractLevel:
         self.explosion_sound = pygame.mixer.Sound(os.path.join('./', *AbstractLevel.RELATIVE_PATH_LIST, 'audio', 'mixkit-magic-sweep-game-trophy-257.wav'))
         self.explosion_sound.set_volume(0.02)
 
+        self.money_icon = pygame.transform.scale(self.load_img('c.png', add_sub_dir=['ui_gold']), (30,30))
+        self.money_icon_pos = self.money_icon.get_rect()
+        self.money_icon_pos.x = self.display.get_width()*0.90
+        self.money_icon_pos.y = 10
         
         self.cursor_img_rect = self.cursor_img.get_rect()
         self.font = self.load_font("LuckiestGuy-Regular.ttf", 100)

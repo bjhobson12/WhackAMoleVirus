@@ -17,6 +17,7 @@ class LevelOne(AbstractLevel):
     def __init__(self, display):
         super().__init__(display)
         self.index = 1
+        self.timer = 10
         pygame.mixer.music.load(os.path.join( 'assets', 'audio', "mixkit-playground-fun-12.mp3"))
         pygame.mixer.music.play(-1, fade_ms=AbstractLevel.TRANSITION_DELAY*1000)
 
@@ -59,6 +60,8 @@ class LevelOne(AbstractLevel):
         self.trap_door_button.update(game, dt)
         self.burrow_cover_button.update(game, dt)
 
+        self.money_text = self.font_small.render('{}'.format(game.coins), True, (255, 255, 255))
+
         for mole in self.mole_entities:
             mole.update(game, dt)
 
@@ -89,6 +92,7 @@ class LevelOne(AbstractLevel):
             if self.kill_count >= self.kill_count_win_bound:
                 self.win_sound.play()
                 game.level_select.unlocked_level[self.index] = True
+                game.coins += 10
             else:
                 self.lose_sound.play()
         elif rand(15) == 0 and self.timer is not 0:
@@ -137,6 +141,9 @@ class LevelOne(AbstractLevel):
         for mole in [(m.sprite, m.position) for m in self.mole_entities]:
             self.display.blit(mole[0], mole[1])
 
+        self.display.blit(self.money_icon, self.money_icon_pos)
+        self.display.blit(self.money_text, (self.money_icon_pos[0] + 50, self.money_icon_pos[1] + 10))
+
            
         self.display.blit(self.timer_text, self.timer_text_pos)
         self.display.blit(self.kill_count_text, self.kill_count_text_pos)
@@ -162,23 +169,27 @@ class LevelOne(AbstractLevel):
                     
                     i -= 1
 
-            if (self.explode_button.contains(pos)):
+            if (self.explode_button.contains(pos)) and game.coins >= 5:
                 self.explode()
-            elif (self.slow_down_button.contains(pos)):
+                game.coins -= 5
+            elif (self.slow_down_button.contains(pos)) and game.coins >= 2:
                 if len(self.mole_entities) > 0:
                     self.slow_down_moles(self.mole_entities[0].lifespan*2.0)
-            elif self.burrow_cover_button.contains(pos):
+                game.coins -= 2
+            elif self.burrow_cover_button.contains(pos) and game.coins >= 2:
                 
                 options = list(set(range(9)) - set([cover_door.hole_num for cover_door in self.burrow_cover_list] + [trap_door.hole_num for trap_door in self.trap_door_list]))
                 if len(options) == 0:
                     return
+                game.coins -= 2
                 loc = rand(0, len(options))
                 self.burrow_cover_list.append(Burrow(self.burrow_cover_list, options[loc], lifespan=10))
             
-            elif self.trap_door_button.contains(pos):
+            elif self.trap_door_button.contains(pos) and game.coins >= 3:
                 options = list(set(range(9)) - set([cover_door.hole_num for cover_door in self.burrow_cover_list] + [trap_door.hole_num for trap_door in self.trap_door_list]))
                 if len(options) == 0:
                     return
+                game.coins -= 3
                 loc = rand(0, len(options))
                 self.trap_door_list.append(TrapDoor(self.trap_door_list, options[loc], lifespan=10))
 

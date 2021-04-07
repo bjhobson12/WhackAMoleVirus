@@ -36,7 +36,7 @@ class WhackAMole:
 
         pygame.init()
         pygame.mixer.init()
-        pygame.mixer.music.set_volume(0.01)
+        pygame.mixer.music.set_volume(0.05)
 
         # Set up display
         self.display = pygame.display.set_mode((1000, 600))
@@ -49,6 +49,8 @@ class WhackAMole:
         self.background_color = self.WHITE
         self.menu = None
         self.level_select = None
+
+        self.coins = 0
 
         pygame.mouse.set_visible(False)
 
