@@ -23,6 +23,9 @@ from levels.level_8 import LevelEight
 from levels.level_9 import LevelNine
 
 
+"""
+This class was written primarily by Rocky Manrique & Jonathan for structuring the level selection process
+"""
 class LevelSelect:
 
     TRANSITION_DELAY = 1
@@ -56,13 +59,6 @@ class LevelSelect:
         self.backward_button = Button(self.display, pygame.transform.scale(self.load_img('b_6.png', add_sub_dir=['ui_gold']), (50,50)), ((self.display.get_width() + 50)/2-75, self.display.get_height()*0.85))
 
         self.backward_button.disabled = True
-
-        """self.forward_button = pygame.transform.scale(self.load_img('b_7.png', add_sub_dir=['ui_gold']), (50,50))
-        self.forward_button_pos = self.forward_button.get_rect()
-        self.forward_button_pos.x, self.forward_button_pos.y = (self.display.get_width() + 50)/2, self.display.get_height()*0.85
-        self.backward_button = pygame.transform.scale(self.load_img('b_6.png', add_sub_dir=['ui_gold']), (50, 50))
-        self.backward_button_pos = self.backward_button.get_rect()
-        self.backward_button_pos.x, self.backward_button_pos.y = (self.display.get_width() + 50)/2-100, self.display.get_height()*0.85"""
 
         self.background = pygame.transform.scale(self.load_img('11_background.png', add_sub_dir=['background_pack']), (self.display.get_width(), self.display.get_height())) 
         self.background_rock = pygame.transform.scale(self.load_img('12_background.png', add_sub_dir=['background_pack']), (self.display.get_width(), self.display.get_height())) 

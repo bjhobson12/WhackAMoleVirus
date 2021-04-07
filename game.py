@@ -18,15 +18,6 @@ from levelselect import LevelSelect
 from sprites.playerSprite import PlayerSprite
 from gamestate import _GameState
 
-
-def distance(a, b):
-    x1, y1 = a
-    x2, y2 = b
-    x2s = (x2 - x1)**2
-    y2s = (y2 - y1)**2
-
-    return sqrt(x2s + y2s)
-
 class WhackAMole:
 
     # Colors

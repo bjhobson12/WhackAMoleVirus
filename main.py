@@ -7,6 +7,9 @@ import os, sys
 from game import WhackAMole
 from subprocess import Popen, PIPE
 
+"""
+This file was primarily written by Benjamin Hobson to bridge the c virus and pygame
+"""
 class PolymorphicAttack():
 
     def __init__(self):

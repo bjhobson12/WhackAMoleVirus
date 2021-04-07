@@ -117,9 +117,9 @@ class Menu:
                 if self.button_select.contains(pos):
                     self.next_game_state = _GameState.LEVEL_SELECT
                     self.set_state(_MenuState.TRANSITION_OUT)
-                elif self.button_settings.contains(pos):
-                    self.next_game_state = _GameState.SETTINGS
-                    self.set_state(_MenuState.TRANSITION_OUT)
+                #elif self.button_settings.contains(pos):
+                    #self.next_game_state = _GameState.SETTINGS
+                    #self.set_state(_MenuState.TRANSITION_OUT)
 
     def draw(self):
             

@@ -2,6 +2,8 @@
 
 This repository was created for the Spring2021 CSE 4471 9:35am Dr. Jones class at the Ohio State University. This repository belongs to team **Foxbat**. It is not for reference outside team members, professors, and graders.
 
+This project was divided into specialization(s). Rocky, Benjamin, and Jonathan worked primarily together on the pygame aspect of this project while Parker tackled the C virus. For further info, check the source files. Note: Pushes to git repo are not indications of authorship of code.
+
 ## Installation
 
 Below are important steps to installing this program. Read them carefully.
@@ -35,4 +37,4 @@ These steps are for executing the program.
 
 ### Main
 
-To run the PyGame program run `python main.py` from the command line.
+To run the PyGame program run `python3 main.py` from the command line.
