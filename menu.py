@@ -1,3 +1,8 @@
+# File: menu.py
+# Created: Tue Apr 06 2021
+#
+# Copyright © 2021 Foxbat
+
 import pygame
 from pygame.locals import MOUSEBUTTONDOWN, MOUSEBUTTONUP
 from components.button import Button

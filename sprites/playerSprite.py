@@ -1,3 +1,8 @@
+# File: playersprite.py
+# Created: Tue Apr 06 2021
+#
+# Copyright © 2021 Foxbat
+
 import os
 from .abstractSprite import AbstractSprite, Frame
 

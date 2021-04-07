@@ -1,3 +1,8 @@
+# File: level_2.py
+# Created: Tue Apr 06 2021
+#
+# Copyright © 2021 Foxbat
+
 from levels.abstractlevel import AbstractLevel
 import pygame
 import os

@@ -1,3 +1,8 @@
+# File: game.py
+# Created: Tue Apr 06 2021
+#
+# Copyright © 2021 Foxbat
+
 import pygame
 import time
 from pygame.locals import MOUSEBUTTONDOWN

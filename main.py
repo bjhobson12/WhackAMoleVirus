@@ -1,4 +1,8 @@
-# Hacking related Modules
+# File: main.py
+# Created: Tue Apr 06 2021
+#
+# Copyright © 2021 Foxbat
+
 import os, sys
 from game import WhackAMole
 from subprocess import Popen, PIPE

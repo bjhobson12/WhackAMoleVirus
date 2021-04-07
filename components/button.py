@@ -1,3 +1,8 @@
+# File: button.py
+# Created: Tue Apr 06 2021
+#
+# Copyright © 2021 Foxbat
+
 from gamestate import _GameState
 
 
