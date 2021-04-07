@@ -2,7 +2,9 @@
 
 This repository was created for the Spring2021 CSE 4471 9:35am Dr. Jones class at the Ohio State University. This repository belongs to team **Foxbat**. It is not for reference outside team members, professors, and graders.
 
-This project was divided into specialization(s). Rocky, Benjamin, and Jonathan worked primarily together on the pygame aspect of this project while Parker tackled the C virus. For further info, check the source files. Note: Pushes to git repo are not indications of authorship of code.
+This project was divided into specialization(s). Rocky, Benjamin, and Jonathan worked primarily together on the pygame aspect of this project while Parker tackled the C virus. For further info, check the source files. 
+
+**Note**: Pushes to git repo are not indications of authorship of code. Additionally, only the pygame works on mac, and only the c virus works on linux
 
 ## Installation
 
